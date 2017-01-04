@@ -193,7 +193,10 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk0.vhd')]"
+              "uri": "[concat('https://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk0.vhd')]"
+              //
+              
+              
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -202,7 +205,7 @@
             {
               "name": "myvm-data-disk1",
               "vhd": {
-                "Uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk1.vhd')]"
+                "Uri": "[concat('https://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk1.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty",
@@ -221,7 +224,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": "true",
-            "storageUri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net')]"
+            "storageUri": "[concat('https://',parameters('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }
