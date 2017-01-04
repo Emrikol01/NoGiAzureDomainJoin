@@ -27,6 +27,28 @@
         "description": "The size of the virtual machines"
       }
     },
+    //
+    "publisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer",
+      "metadata": { "description": "The publisher value"  }
+    }, 
+    "offer": {
+      "type": "string",
+      "defaultValue": "WindowsServer",
+      "metadata": { "description": "The offer value"  }
+    }, 
+    "sku": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter",
+      "metadata": { "description": "The sku value"  }
+    },
+    "version": {
+      "type": "string",
+      "defaultValue": "latest",
+      "metadata": { "description": "The version value"  }
+    },    
+    //
     "domainToJoin": {
       "type": "string",
       "metadata": {
@@ -150,10 +172,10 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
-            "sku": "[variables('windowsOSVersion')]",
-            "version": "latest"
+            "publisher": "[parameters('publisher')]",
+            "offer": "[parameters('offer')]",
+            "sku": "[parameters('sku')]",
+            "version": "[parameters('version')]"
           },
           "osDisk": {
             "name": "osdisk",
