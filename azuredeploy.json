@@ -14,6 +14,18 @@
         "description": "Existing subnet that contains the domain controller"
       }
     },
+    "nicIPAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "the static IP of the VM example: 10.0.0.7, verify your subnet!"
+      }
+    },    
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "storage account name"
+      }
+    },    
     "dnsLabelPrefix": {
       "type": "string",
       "metadata": {
@@ -71,7 +83,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'OU=testOU; DC=domain; DC=Domain; DC=com"
+        "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: 'CN=Computers,DC=CONTOSO,DC=COM"
       }
     },
     "domainJoinOptions": {
@@ -95,10 +107,10 @@
     }
   },
   "variables": {
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id, deployment().name))]",
-    "imagePublisher": "MicrosoftVisualStudio",
-    "imageOffer": "windows",
-    "windowsOSVersion": "10-Enterprise-N",
+    //"storageAccountName": "[concat(uniquestring(resourceGroup().id, deployment().name))]",
+    //"imagePublisher": "MicrosoftVisualStudio",
+    //"imageOffer": "windows",
+    //"windowsOSVersion": "10-Enterprise-N",
     "apiVersion": "2015-06-15",
     "nicName": "[concat(parameters('dnsLabelPrefix'),'Nic')]",
     "publicIPName": "[concat(parameters('dnsLabelPrefix'),'Pip')]",
@@ -121,7 +133,7 @@
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
+      "name": "[parameters('storageAccountName')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "accountType": "Standard_LRS"
@@ -140,7 +152,8 @@
           {
             "name": "ipconfig",
             "properties": {
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('nicIPAddress')]",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPName'))]"
               },
@@ -158,7 +171,7 @@
       "name": "[parameters('dnsLabelPrefix')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
         "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
       ],
       "properties": {
@@ -180,7 +193,7 @@
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk0.vhd')]"
+              "uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk0.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -189,11 +202,11 @@
             {
               "name": "myvm-data-disk1",
               "vhd": {
-                "Uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk1.vhd')]"
+                "Uri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net/vhds/',parameters('dnsLabelPrefix'), 'disk1.vhd')]"
               },
               "caching": "None",
               "createOption": "Empty",
-              "diskSizeGB": "1000",
+              "diskSizeGB": "500",
               "lun": 0
             }
           ]
@@ -208,7 +221,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": "true",
-            "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
+            "storageUri": "[concat('http://',parameters('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }
