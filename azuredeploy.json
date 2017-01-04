@@ -130,15 +130,15 @@
         }
       }
     },
-    {
-      "apiVersion": "[variables('apiVersion')]",
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "accountType": "Standard_LRS"
-      }
-    },
+//    {
+//      "apiVersion": "[variables('apiVersion')]",
+//      "type": "Microsoft.Storage/storageAccounts",
+//      "name": "[parameters('storageAccountName')]",
+//      "location": "[resourceGroup().location]",
+//      "properties": {
+//        "accountType": "Standard_LRS"
+//      }
+//    },
     {
       "apiVersion": "[variables('apiVersion')]",
       "type": "Microsoft.Network/networkInterfaces",
